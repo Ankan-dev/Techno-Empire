@@ -31,19 +31,23 @@ const RegisterStudent = async (req, res) => {
         });
     }
 
+    console.log(email);
+
     try {
         // Check if the student already exists
         const isExistStudent = await Student.findOne({ email });
         if (isExistStudent) {
+            console.log(true)
             return res.status(409).json({
                 message: "User already exists",
                 success: false
             });
         }
 
+        
         // Hash the password
         const hashedPassword = await hashingPassword(password);
-
+        console.log(hashedPassword);
         // Create a new student
         const newStudent = await Student.create({ fullname, email, password: hashedPassword });
 
@@ -78,6 +82,8 @@ const RegisterStudent = async (req, res) => {
         }
     } catch (error) {
         // Handle unexpected errors
+        console.log("Error has occured")
+        console.log(error.message);
         return res.status(500).json({
             message: "Internal Server Error",
             success: false,

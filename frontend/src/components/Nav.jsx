@@ -37,13 +37,16 @@ const Nav = () => {
         }
     }
 
+    const profileNavigate=()=>{
+        navigate("/Profile")
+    }
   return (
     <nav className='w-full h-[7vh] text-white bg-black flex justify-between'>
         <div className=' w-[50%] md:w-[20%] h-full flex items-center justify-center'>
-            <p className='xl:text-3xl text-2xl font-bold'>Techno Empire</p>
+            <p className='xl:text-[95%] text-2xl font-bold'>Techno Empire</p>
         </div>
         <div className='w-[40%] h-full hidden md:flex'>
-            <ul className='flex w-full h-full justify-around items-center text-xl font-bold'>
+            <ul className='flex w-full h-full justify-around items-center text-[80%] font-bold'>
                 <li>Home</li>
                 <li>courses</li>
                 <li>classes</li>
@@ -56,8 +59,8 @@ const Nav = () => {
                 <button className='border-2 px-6 py-1 font-bold ' onClick={navigateToLoginRoute}>login</button>
                 :
                 <ul className='w-full h-full  hidden justify-center gap-16 items-center md:flex' >
-                <li className='text-3xl'><IoCartSharp /></li>
-                <li className='font-bold text-xl'>{User.user[0]?.data?.fullname}</li>
+                <li className='text-xl'><IoCartSharp /></li>
+                <li onClick={profileNavigate} className='font-bold text-[80%]'>{User.user[0]?.data?.fullname}</li>
                 <li>
                     <button className='border-2 px-6 py-1 font-bold ' onClick={logoutsubmitHandler}>logout</button>
                 </li>

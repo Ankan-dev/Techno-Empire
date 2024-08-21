@@ -6,8 +6,10 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Home from './routes/Home.jsx'
 import RegLog from './routes/RegLog.jsx'
 import VerifyUser from './routes/VerifyUser.jsx'
+import Profile from './routes/Profile.jsx'
 import { Provider } from 'react-redux'
 import { store } from './store/store.js'
+
 
 const router = createBrowserRouter([
   {
@@ -28,6 +30,10 @@ const router = createBrowserRouter([
       {
         path: "/verify-user",
         element: <VerifyUser />
+      },
+      {
+        path:"/profile",
+        element:<Profile/>
       }
     ]
   }
