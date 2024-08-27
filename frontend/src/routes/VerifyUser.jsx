@@ -14,6 +14,7 @@ const VerifyUser = () => {
     const [code, setcode] = useState("")
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [timeOver, setTImeOver] = useState(false)
 
     useEffect(() => {
         timer();
@@ -52,6 +53,7 @@ const VerifyUser = () => {
                     return previousCount - 1;
                 } else {
                     clearInterval(timeInterval.current);
+                    setTImeOver(true)
                     return 0
                 }
             })
@@ -73,12 +75,33 @@ const VerifyUser = () => {
         }
     }
 
+    const resentCode= async(e)=>{
+        e.preventDefault();
+        try {
+            if(!email){
+                console.log("Email is missing")
+            }
+            const response=await axios.put('/app/student-resend',{email:email});
+            if(!response){
+                console.log("Something is wrong");
+            }
+            console.log(response.data);
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
+
     return (
         <div className='w-full h-[70vh] flex flex-col items-center pt-6'>
             <h1 className='text-2xl font-bold md:text-5xl md:mt-10'>Enter the Code sent to your mail</h1>
             <form className='w-full min-h-[15vh]  flex flex-col items-center justify-center mt-5 gap-3 '>
                 <input type='password' value={code} onChange={(e) => { handleChange(e) }} placeholder='Enter the code' className='w-[80%] h-10 border-2 border-black p-2 md:w-[30%]' />
                 <button className='bg-black text-white font-bold w-[10rem] h-[2.5rem]' onClick={handleSubmit}>Verify</button>
+                {
+                    timeOver ?
+                        <button className=' border-black border-solid border-2 font-bold w-[10rem] h-[2.5rem] my-5' onClick={resentCode}>Resend Code</button>
+                        : <></>
+                }
             </form>
 
             <div className=' w-[5rem] h-[5rem] border-black border-4 rounded-full flex justify-center items-center mt-4'>
