@@ -25,6 +25,7 @@ const RegisterStudent = async (req, res) => {
 
     // Validate input fields
     if (!fullname || !email || !password) {
+        console.log("ulala")
         return res.status(400).json({
             message: "Enter the required fields",
             success: false
@@ -94,6 +95,7 @@ const RegisterStudent = async (req, res) => {
 
 const verifyEmail = async (req, res) => {
     const { email, code } = req.body;
+    console.log(code)
 
     if (!email) {
         return res.status(400).json({
@@ -109,7 +111,6 @@ const verifyEmail = async (req, res) => {
         });
     }
 
-    console.log(email, code)
     try {
         const codeFromDb = await Token.findOne({ email });
         if (!codeFromDb) {

@@ -20,6 +20,9 @@ const RegLog = () => {
         password:""
     });
     const dispatch=useDispatch();
+    const [isError,setisError]=useState("");
+    const [isLoginError,setisLoginError]=useState("");
+
 
     const Registered = (val) => {
         setisRegistered(val);
@@ -52,7 +55,19 @@ const RegLog = () => {
                 }
             }
         }catch(error){
-            console.log(error.message);
+            if (error.response) {
+                // Server responded with a status other than 2xx
+                console.log(error.response.data.message); // Log the error message from the server
+                
+                setisLoginError(error.response.data.message);
+                console.log(error.response.status); // Log the status code
+            } else if (error.request) {
+                // Request was made, but no response was received
+                console.log("No response received:", error.request);
+            } else {
+                // Something else happened while setting up the request
+                console.log("Error:", error.message);
+            }
         }
     }
 
@@ -75,13 +90,25 @@ const RegLog = () => {
                 if(registerResponse){
                     console.log(registerResponse);
                     if(registerResponse.data.success==true){
-                        navigate('/verify-user',{state:{email:data.email}})
+                        //navigate('/verify-user',{state:{email:data.email}})
+                        console.log(registerResponse.data);
                     }
                 }
 
 
             }catch(error){
-                console.log(error.message);
+                if (error.response) {
+                    // Server responded with a status other than 2xx
+                    console.log(error.response.data.message); // Log the error message from the server
+                    setisError(error.response.data.message);
+                    console.log(error.response.status); // Log the status code
+                } else if (error.request) {
+                    // Request was made, but no response was received
+                    console.log("No response received:", error.request);
+                } else {
+                    // Something else happened while setting up the request
+                    console.log("Error:", error.message);
+                }
             }
         }
     }
@@ -102,6 +129,9 @@ const RegLog = () => {
                         <h1 className='text-[8vw] font-bold mb-5 mt-7 md:text-[2vw]'>Login</h1>
                         <input name='email' type='email' placeholder='username' value={loginData.email} onChange={handleLoginChange} className='w-[80%] h-[7%] outline-none border-b-4 border-black bg-transparent mb-4 py-2' />
                         <input name='password' type='password' placeholder='password' value={loginData.password} onChange={handleLoginChange} className='w-[80%] h-[7%] outline-none border-b-4 border-black bg-transparent mb-6 py-2' />
+                        {
+                            isLoginError!=""?<div className='w-[20rem] h-[3rem] bg-red-300 border-4 border-red-600 border-solid mb-5 flex items-center justify-center font-bold'>{isLoginError}</div> :""
+                        }
                         <button onClick={submitLogin} className='border-black border-2 px-10 py-2'>Login</button>
                     </>:
                     <>
@@ -112,7 +142,11 @@ const RegLog = () => {
                         <input onChange={(e)=>confirmPassword(e)} value={checkPassword} type='password' placeholder='confirm password' className={iscorrect===true?'w-[80%] h-[7%] outline-none border-b-4 border-black bg-transparent mb-6 py-2':'w-[80%] h-[7%] outline-none border-b-4 border-red-600 bg-transparent mb-6 py-2'} />
                         {
                             iscorrect===false?<p className='mb-6 text-red-600 font-bold'>Password Doesn't Match</p>:""
-                        }                        
+                        }     
+                        {
+                            isError!=""?<div className='w-[20rem] h-[3rem] bg-red-300 border-4 border-red-600 border-solid mb-5 flex items-center justify-center font-bold'>{isError}</div> :""  
+                        }
+                                        
                         <button className='border-black border-2 px-10 py-2' onClick={handleSubmit}>Register</button>
                         
                     </>
