@@ -353,4 +353,52 @@ const resendCode=async(req,res)=>{
 }
 
 
-module.exports = { RegisterStudent, verifyEmail, profile,login, logout,deleteToken,resendCode };
+const updateProfileDetails = async (req, res) => {
+    const { name, phone, college, cgpa } = req.body;
+
+    const updateData = {};
+    if (name) updateData.fullname = name;
+    if (phone) updateData.phone = phone;
+    if (college) updateData.college = college;
+    if (cgpa) updateData.cgpa = cgpa;
+
+    if (Object.keys(updateData).length === 0) {
+        return res.status(400).json({
+            message: "Please send some data to update",
+            success: false,
+        });
+    }
+
+    try {
+        const response = await Student.findByIdAndUpdate(req.user._id, updateData, { new: true });
+        if (!response) {
+            return res.status(404).json({
+                message: "Student not found",
+                success: false,
+            });
+        }
+
+        const updatedData=await Student.findOne(req.user._id).select("-password -refreshToken");
+        if(!updatedData){
+            return res.status(404).json({
+                message: "Student not found",
+                success: false,
+            });
+        }
+        return res.status(200).json({
+            message: "Details updated successfully",
+            success: true,
+            data: updatedData
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: "Internal server error",
+            success: false,
+            error: error.message,
+        });
+    }
+};
+
+
+
+module.exports = { RegisterStudent, verifyEmail, profile,login, logout,deleteToken,resendCode,updateProfileDetails };

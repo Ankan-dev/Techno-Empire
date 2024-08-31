@@ -2,6 +2,9 @@ import React, { useEffect, useRef, useState } from 'react'
 import { FaEdit } from "react-icons/fa";
 import ProfileImage from '../components/ProfileImage.jsx';
 import { useSelector } from 'react-redux';
+import axios from 'axios';
+import {useDispatch} from 'react-redux';
+import {addUser} from '../slice/user-slice.js'
 
 const Profile = () => {
     const userExists = useSelector(state => state.user);
@@ -15,6 +18,7 @@ const Profile = () => {
     const [phone, setPhone]=useState(null);
     const [college, setCollege]=useState(null);
     const [cgpa, setcgpa]=useState(null);
+    const dispatch=useDispatch();
 
 
     useEffect(()=>{
@@ -22,10 +26,51 @@ const Profile = () => {
             setLoggedInUser(userExists.user[0].data);
             setName(userExists.user[0].data.fullname);
             setEmail(userExists.user[0].data.email)
+            if(userExists.user[0].data.phone){
+                setPhone(userExists.user[0].data.phone)
+            }
+            if(userExists.user[0].data.college){
+                setCollege(userExists.user[0].data.college)
+            }
+            if(userExists.user[0].data.cgpa){
+                setcgpa(userExists.user[0].data.cgpa)
+            }
         }
     },[userExists])
     console.log(loggeinUser);
+    
 
+    const updateProfileData=async(e)=>{
+        e.preventDefault();
+        const updatedData={
+            name:name,
+            phone:phone,
+            college:college,
+            cgpa:cgpa
+        };
+
+        try {
+            const response = await axios.put('/app/student-updateDetails',updatedData);
+            if(response && response.data){
+                //console.log(response.data.data);
+                dispatch(addUser(response.data.data))
+            }
+        } catch (error) {
+            if (error.response) {
+                // Server responded with a status other than 2xx
+                console.log(error.response.data.message); // Log the error message from the server
+                
+                setisLoginError(error.response.data.message);
+                console.log(error.response.status); // Log the status code
+            } else if (error.request) {
+                // Request was made, but no response was received
+                console.log("No response received:", error.request);
+            } else {
+                // Something else happened while setting up the request
+                console.log("Error:", error.message);
+            }
+        }
+    }
 
     const changeName=(e)=>{
         const newName=e.target.value;
@@ -93,7 +138,7 @@ const Profile = () => {
                     <div className='w-full flex justify-center '><input onChange={changePhone} value={phone} placeholder='Phone No.' disabled={phoneField} className='w-[70%] h-[2.5rem] border-black border-2 border-solid px-4 rounded-l-lg'/><button className='w-[10%] h-[2.5rem] border-2 border-solid border-black  rounded-r-lg flex justify-center items-center' onClick={phoneEdit}><FaEdit /></button></div>
                     <div className='w-full flex justify-center '><input onChange={changeCollege} value={college} disabled={collegeField} placeholder='College or University' className='w-[70%] h-[2.5rem] border-black border-2 border-solid px-4 rounded-l-lg'/><button className='w-[10%] h-[2.5rem] border-2 border-solid border-black rounded-r-lg flex justify-center items-center' onClick={collegeEdit}><FaEdit /></button></div>
                     <div className='w-full flex justify-center '><input onChange={changeCgpa} value={cgpa} disabled={CGPAField} placeholder='CGPA' className='w-[70%] h-[2.5rem] border-black border-2 border-solid px-4 rounded-l-lg'/><button className='w-[10%] h-[2.5rem] border-2 border-solid border-black  rounded-r-lg flex justify-center items-center' onClick={CGPAEdit}><FaEdit /></button></div>
-                    <button className='border-2 border-black border-solid px-10 py-3 font-bold'>save</button>
+                    <button className='border-2 border-black border-solid px-10 py-3 font-bold' onClick={updateProfileData}>save</button>
                 </form>
             </div>
             

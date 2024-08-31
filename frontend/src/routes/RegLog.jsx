@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import {useDispatch} from 'react-redux';
 import {addUser} from '../slice/user-slice.js'
 
+
 const RegLog = () => {
 
     const [isRegistered, setisRegistered] = useState(false);
@@ -90,7 +91,7 @@ const RegLog = () => {
                 if(registerResponse){
                     console.log(registerResponse);
                     if(registerResponse.data.success==true){
-                        //navigate('/verify-user',{state:{email:data.email}})
+                        navigate('/verify-user',{state:{email:data.email}})
                         console.log(registerResponse.data);
                     }
                 }
