@@ -13,6 +13,18 @@ const studentSchema=mongoose.Schema({
         type:String,
         require:true
     },
+    phone:{
+        type:String,
+        default:undefined
+    },
+    college:{
+        type:String,
+        default:undefined
+    },
+    cgpa:{
+        type:String,
+        default:undefined
+    },
     verified:{
         type:Boolean,
         default:false

@@ -10,7 +10,9 @@ export const userSlice = createSlice({
   reducers: {
     addUser:(state,action)=>{
       //console.log(action.payload)
-      state.user.push(action.payload)
+      if(state.user.length===0){
+        state.user.push(action.payload)
+      }
     },
     removeUser:(state)=>{
       state.user=[]
