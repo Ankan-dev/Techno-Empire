@@ -17,6 +17,10 @@ const teacherSchema= mongoose.Schema({
     picture:{
         type:String
     },
+    verified: {
+        type:Boolean,
+        default:false
+    },
     refreshToken:{
         type:String
     }
