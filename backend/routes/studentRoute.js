@@ -11,4 +11,6 @@ router.put('/student-logout',auth,logout);
 router.put('/student-resend',resendCode);
 router.put('/student-deleteToken',deleteToken);
 router.put('/student-updateDetails',auth,updateProfileDetails);
+
+
 module.exports=router

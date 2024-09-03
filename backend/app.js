@@ -3,6 +3,7 @@ const express=require('express');
 const cookieParser =require('cookie-parser');
 const cors=require('cors');
 const studentRoute=require('./routes/studentRoute.js');
+const teacherRoute=require('./routes/teacherRoute.js')
 
 
 const app=express();
@@ -21,6 +22,7 @@ app.use(express.urlencoded({extended:true,limit:'16kb'}));
 app.use(express.static("public"));
 
 app.use('/app',studentRoute);
+app.use('/app',teacherRoute);
 
 
 db_conn()
