@@ -4,11 +4,11 @@ const teacherModel = require('../models/teacher-model.js');
 
 const addProduct = async (req, res) => {
     const { category, image, description, name, price, discount } = req.body;
-    const teacher = req.teacherModel;
+    const teacher = req.user;
     try {
 
         const findCategory = await category_model.findById(category);
-        const findTeacher = await teacherModel.findById(teacher.id);
+        const findTeacher = await teacherModel.findById(teacher._id);
 
         if (!findCategory) {
             return res.json({
@@ -40,6 +40,14 @@ const addProduct = async (req, res) => {
 
 const deleteProductsById = async (req, res) => {
     let id = req.params.id;
+    const teacher=req.user
+    if(!teacher){
+        return res.status(404)
+                .json({
+                    message:"teacher not found",
+                    success:false
+                })
+    }
     try {
         const deleteProducts = await products.findByIdAndDelete(id);
 
@@ -86,6 +94,14 @@ const getProductsById = async (req,res)=>{
 
 const updateProductsById = async (req, res) => {
     let id = req.params.id;
+    const teacher=req.user
+    if(!teacher){
+        return res.status(404)
+                .json({
+                    message:"teacher not found",
+                    success:false
+                })
+    }
     try {
         const updateProducts = await products.findByIdAndUpdate(id, req.body, { new: true });
 
