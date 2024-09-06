@@ -280,4 +280,78 @@ const logout = async (req, res) => {
         })
 }
 
-module.exports = {RegisterTeacher,verifyEmail,profile,login,logout};
+
+const deleteToken=async(req,res)=>{
+    const {email}=req.body;
+    if(!email){
+        return res.status(400)
+        .json({
+            message:"email not found",
+            success:false
+        })
+    }
+
+    try {
+        const deleteStatus= await Token.findOneAndUpdate({ email: email }, { refreshToken: "" }, { new: true });
+        if(!deleteStatus){
+            return  res.status(500)
+            .json({
+                message:"token not deleted",
+                success:false
+            })
+        }
+        return res.status(201)
+        .json({
+            message:"token is deleted",
+            success:true
+        })
+    } catch (error) {
+        return res.status(500)
+        .json({
+            message:"Internal server error",
+            success:false
+        })
+    }
+    
+    
+}
+
+
+const resendCode=async(req,res)=>{
+    const {email}=req.body;
+    console.log(email);
+    if(!email){
+        return res.status(400)
+        .json({
+            message:"email not found",
+            success:false
+        })
+    }
+    const otp = OneTimePassword();
+    const subject = "Email Id Verification Mail";
+    const text = `Your One Time Password is \n OTP: ${otp}\n Do not share this with anybody.`;
+
+    // Send the OTP via email
+    let emailResponse = await sendEmail(email, subject, text);
+    console.log(emailResponse);
+    if (!emailResponse) {
+        return res.status(400).json({
+            message: "Failed to send verification email",
+            success: false
+        });
+    }
+
+    // Save the OTP token to the database
+    await Token.create({ email: email, student: emailResponse._id, token: otp });
+
+    return res.status(200).json({
+        message: "Student created successfully. Please verify your email.",
+        success: true
+    }); 
+}
+
+
+
+
+
+module.exports = {RegisterTeacher,verifyEmail,profile,login,logout,deleteToken,resendCode};
