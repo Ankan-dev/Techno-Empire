@@ -115,19 +115,19 @@ const RegLog = () => {
     }
 
     return (
-        <>
-            <form className='w-full h-[100vh]  flex flex-col items-center py-[10%] md:border-4 md:border-black md:w-[30%] md:h-[50%] md:py-[5%] md:mx-auto md:my-[3%]'>
+        <div className='mt-[16vh]'>
+            <form className='w-full h-[100vh] flex flex-col items-center py-[10%] md:border-4 md:border-black md:w-[30%] md:h-[50%] md:py-[5%] md:mx-auto md:my-[3%]'>
                 <div className='w-[50vw] h-[5vh] md:w-[20vw] rounded-full border-black border-4 relative flex'>
                     <div className='w-[50%] h-full absolute bg-black rounded-full z-[-1]'></div>
-                    <div className='w-[99%] h-[99%] rounded-full flex items-center justify-around font-bold'>
-                        <p className='text-white' onClick={()=>Registered(false)}>Login</p>
-                        <p onClick={()=>Registered(true)}> Register</p>
+                    <div className='w-[99%] h-[99%] rounded-full flex items-center justify-around font-bold '>
+                        <p className='text-white my-2' onClick={()=>Registered(false)}>Login</p>
+                        <p className='my-2' onClick={()=>Registered(true)}> Register</p>
                     </div>
                 </div>
                 {
                     isRegistered===false?
                     <>
-                        <h1 className='text-[8vw] font-bold mb-5 mt-7 md:text-[2vw]'>Login</h1>
+                        <h1 className='text-[8vw] font-bold  mt-7 md:text-[2vw]'>Login</h1>
                         <input name='email' type='email' placeholder='username' value={loginData.email} onChange={handleLoginChange} className='w-[80%] h-[7%] outline-none border-b-4 border-black bg-transparent mb-4 py-2' />
                         <input name='password' type='password' placeholder='password' value={loginData.password} onChange={handleLoginChange} className='w-[80%] h-[7%] outline-none border-b-4 border-black bg-transparent mb-6 py-2' />
                         {
@@ -136,7 +136,7 @@ const RegLog = () => {
                         <button onClick={submitLogin} className='border-black border-2 px-10 py-2'>Login</button>
                     </>:
                     <>
-                    <h1 className='text-[8vw] font-bold mb-5 mt-7 md:text-[2vw]'>Register</h1>
+                    <h1 className='text-[8vw] font-bold mt-7 md:text-[2vw]'>Register</h1>
                         <input name='fullname' onChange={(e)=>handleRegesterChange(e)} value={data.fullname} type='text' placeholder='full name' className='w-[80%] h-[7%] outline-none border-b-4 border-black bg-transparent mb-4 py-2' />
                         <input name='email' onChange={(e)=>handleRegesterChange(e)} value={data.email} type='email' placeholder='email' className='w-[80%] h-[7%] outline-none border-b-4 border-black bg-transparent mb-4 py-2' />
                         <input name='password' onChange={(e)=>handleRegesterChange(e)} value={data.password} type='password' placeholder='password' className={iscorrect===true?'w-[80%] h-[7%] outline-none border-b-4 border-black bg-transparent mb-6 py-2':'w-[80%] h-[7%] outline-none border-b-4 border-red-600 bg-transparent mb-6 py-2'} />
@@ -153,7 +153,7 @@ const RegLog = () => {
                     </>
                 }
             </form>
-        </>
+        </div>
     )
 }
 
