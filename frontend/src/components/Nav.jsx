@@ -78,7 +78,7 @@ const Nav = () => {
         <div className='h-full md:hidden flex items-center justify-center'>
         <RxHamburgerMenu className='text-3xl cursor-pointer font-bold' onClick={openMenu}/>
         </div>
-        <div className={`w-[50vw] h-full fixed right-[${menu}%] bg-black shadow-md shadow-slate-300 transition-right duration-500 ease-in-out`}>
+        <div className={`w-[50vw] h-full fixed  bg-black shadow-md shadow-slate-300 transition-right duration-500 ease-in-out`} style={{right:`${menu}%`}}>
         {
                 (User.user.length===0)? 
                 <button className='border-2 px-6 py-1 font-bold mx-3 mt-3 ' onClick={navigateToLoginRoute}>login</button>
