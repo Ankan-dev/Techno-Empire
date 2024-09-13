@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import Layout from './Layout.jsx'
+import Layout2 from './Layout2.jsx'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Home from './routes/Home.jsx'
@@ -14,13 +15,19 @@ import Learning from './routes/Learning.jsx'
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path:"",
+    element:<Layout2/>,
+    children:[
+      {
+        path:"/",
+        element:<Home/>
+      }
+    ]
+  },
+  {
+    path: "",
     element: <Layout />,
     children: [
-      {
-        path: "",
-        element: <Home />
-      },
       {
         path:"/Learning",
         element:<Learning/>
