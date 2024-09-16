@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import {useDispatch} from 'react-redux';
 import {addUser} from '../slice/user-slice.js'
+import './style-folder/style.css'
 
 const Profile = () => {
     const userExists = useSelector(state => state.user);
@@ -115,8 +116,8 @@ const Profile = () => {
 
 
     return (
-        <div className='w-full h-[93vh] mt-[7vh] lg:flex'>
-            <div className='hidden lg:block lg:w-[50%] h-full lg:bg-gray-300'>
+        <div className='w-full h-[93vh] mt-[7vh] lg:flex bg-black'>
+            <div className='hidden lg:block lg:w-[45%] h-full '>
                 <div className='my-6'>
                     <ProfileImage/>
                 </div>
@@ -127,18 +128,19 @@ const Profile = () => {
                     </ul>
                 </div>
             </div>
+            <hr className='w-[2px] h-[80%] mt-16 bg-white lg:block hidden'/>
             <div className='w-full h-full pt-7 lg:w-[50%]'>
                 <div className='lg:hidden'>
                     <ProfileImage/>
                 </div>
-                <form className='w-full h-[33rem]  flex flex-col items-center md:border-2 md:border-black md:border-solid md:w-[80%] rounded-2xl md:mx-auto md:mt-10'>
-                    <h1 className='font-bold py-3'>Your Details</h1>
-                    <div className='flex justify-center w-[100%] h-[2.5rem] mb-4'><input className='w-[70%] border-2 border-solid border-black px-4 rounded-l-lg' onChange={changeName} value={name} disabled={nameField}  /><button className='w-[10%] h-[2.5rem] border-2 border-solid border-black  rounded-r-lg flex justify-center items-center' onClick={nameEdit}><FaEdit /></button></div>
-                    <input className='w-[80%] h-[2.5rem] border-2 border-solid border-black px-4 rounded-lg mb-4' value={email} disabled />
-                    <div className='flex justify-center w-[100%] h-[2.5rem] mb-4'><input className='w-[70%] border-2 border-solid border-black px-4 rounded-l-lg' onChange={changePhone} value={phone} placeholder='Phone No.' disabled={phoneField} /><button className='w-[10%] h-[2.5rem] border-2 border-solid border-black  rounded-r-lg flex justify-center items-center' onClick={phoneEdit}><FaEdit /></button></div>
-                    <div className='flex justify-center w-[100%] h-[2.5rem] mb-4'><input className='w-[70%] border-2 border-solid border-black px-4 rounded-l-lg' onChange={changeCollege} value={college} disabled={collegeField} placeholder='College or University' /><button className='w-[10%] h-[2.5rem] border-2 border-solid border-black  rounded-r-lg flex justify-center items-center' onClick={collegeEdit}><FaEdit /></button></div>
-                    <div className='flex justify-center w-[100%] h-[2.5rem] mb-4'><input className='w-[70%] border-2 border-solid border-black px-4 rounded-l-lg' onChange={changeCgpa} value={cgpa} disabled={CGPAField} placeholder='CGPA'/><button className='w-[10%] h-[2.5rem] border-2 border-solid border-black  rounded-r-lg flex justify-center items-center' onClick={CGPAEdit}><FaEdit /></button></div>
-                    <button onClick={updateProfileData} className='text-white bg-black px-16 py-2.5 rounded-full font-bold text-xl'>save</button>
+                <form id='profile-frame' className='w-full h-[33rem]  flex flex-col items-center md:border-4 md:border-white md:border-solid md:w-[80%] rounded-2xl md:mx-auto md:mt-10'>
+                    <h1 className='font-bold py-3 text-white'>Your Details</h1>
+                    <div className='flex justify-center w-[100%] h-[2.5rem] mb-4'><input id='Name' className='w-[70%] border-2 text-white border-solid border-blue-400 px-4 rounded-l-lg' onChange={changeName} value={name} disabled={nameField}  /><button className='w-[10%] h-[2.5rem] border-2 border-solid border-blue-400 text-blue-400  rounded-r-lg flex justify-center items-center' onClick={nameEdit}><FaEdit /></button></div>
+                    <input id='email' className='w-[80%] h-[2.5rem] text-white border-2 border-solid border-blue-400 px-4 rounded-lg mb-4' value={email} disabled />
+                    <div className='flex justify-center w-[100%] h-[2.5rem] mb-4'><input id='phn_No' className='w-[70%] border-2 border-solid border-blue-400 px-4 rounded-l-lg text-white' onChange={changePhone} value={phone} placeholder='Phone No.' disabled={phoneField} /><button className='w-[10%] h-[2.5rem] border-2 border-solid border-blue-400 text-blue-400  rounded-r-lg flex justify-center items-center' onClick={phoneEdit}><FaEdit /></button></div>
+                    <div className='flex justify-center w-[100%] h-[2.5rem] mb-4'><input id='college' className='w-[70%] border-2 border-solid border-blue-400 px-4 rounded-l-lg text-white' onChange={changeCollege} value={college} disabled={collegeField} placeholder='College or University' /><button className='w-[10%] h-[2.5rem] border-2 border-solid border-blue-400 text-blue-400  rounded-r-lg flex justify-center items-center' onClick={collegeEdit}><FaEdit /></button></div>
+                    <div className='flex justify-center w-[100%] h-[2.5rem] mb-4'><input id='cgpa' className='w-[70%] border-2 border-solid border-blue-400 px-4 rounded-l-lg text-white' onChange={changeCgpa} value={cgpa} disabled={CGPAField} placeholder='CGPA'/><button className='w-[10%] h-[2.5rem] border-2 border-solid border-blue-400 text-blue-400  rounded-r-lg flex justify-center items-center' onClick={CGPAEdit}><FaEdit /></button></div>
+                    <button id='profile-save-button' onClick={updateProfileData} className='text-white bg-black px-16 py-2.5 rounded-full font-bold text-xl border-4 border-white'>save</button>
                 </form>
             </div>
             

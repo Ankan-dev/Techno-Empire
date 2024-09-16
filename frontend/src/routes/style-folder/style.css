@@ -1,0 +1,50 @@
+
+@media (min-width:768px) {
+    #login-form {
+        box-shadow: -1px 1px 70px #60a5fa, 5px 5px 50px inset #60a5fa;
+    }
+    #register-form{
+        box-shadow: -1px 1px 70px #60a5fa, 5px 5px 50px inset #60a5fa;
+    }
+
+    #profile-frame{
+        box-shadow: -1px 1px 70px #60a5fa, 5px 5px 50px inset #60a5fa;
+    }
+}
+
+#fullname{
+    background-color: rgba(96, 165, 250, 0.448)
+}
+#email{
+    background-color: rgba(96, 165, 250, 0.448)
+}
+
+#password{
+    background-color: rgba(96, 165, 250, 0.448)
+}
+
+#confirm-password{
+    background-color: rgba(96, 165, 250, 0.448)
+}
+
+#login-button {
+    box-shadow: -2px 1px 45px #60a5fa, 5px 5px 50px inset #60a5fa;
+}
+
+#Name{
+    background-color: rgba(96, 165, 250, 0.448);
+}
+#phn_No{
+    background-color: rgba(96, 165, 250, 0.448);
+}
+#college{
+    background-color: rgba(96, 165, 250, 0.448); 
+}
+#cgpa{
+    background-color: rgba(96, 165, 250, 0.448); 
+}
+
+#profile-save-button{
+    box-shadow: -1px 1px 70px #60a5fa, 5px 5px 50px inset #60a5fa;
+}
+

@@ -21,7 +21,15 @@ const router = createBrowserRouter([
       {
         path:"/",
         element:<Home/>
-      }
+      },
+      {
+        path: "/Register-Login",
+        element: <RegLog />,
+      },
+      {
+        path: "/verify-user",
+        element: <VerifyUser />
+      },
     ]
   },
   {
@@ -31,17 +39,6 @@ const router = createBrowserRouter([
       {
         path:"/Learning",
         element:<Learning/>
-      },
-      {
-        path: "/Register-Login",
-        element: <RegLog />,
-        children: [
-
-        ]
-      },
-      {
-        path: "/verify-user",
-        element: <VerifyUser />
       },
       {
         path:"/profile",
