@@ -122,9 +122,9 @@ const Profile = () => {
                     <ProfileImage/>
                 </div>
                 <div className='w-[80%] h-[60%]  mx-auto flex flex-col items-center py-3 px-3 overflow-auto'>
-                    <h1 className='font-bold text-[2rem] mb-5'>Your Courses</h1>
+                    <h1 className='font-bold text-[2rem] mb-5 text-white'>Your Courses</h1>
                     <ul className='w-full min-h-[60%] p-4'>
-                        <li className='w-full flex justify-center'>No Courses are available</li>
+                        <li className='w-full flex justify-center text-white'>No Courses are available</li>
                     </ul>
                 </div>
             </div>

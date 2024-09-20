@@ -25,11 +25,13 @@ const Nav = () => {
     const navigateToLoginRoute = (e) => {
         e.preventDefault();
         navigate('/Register-Login');
+        
     };
 
     const logoutsubmitHandler = (e) => {
         e.preventDefault();
         logout();
+        setMenu(-100);
     };
 
     const logout = async () => {
@@ -45,6 +47,7 @@ const Nav = () => {
 
     const profileNavigate = () => {
         navigate("/Profile");
+        setMenu(-100);
     };
 
     const dropDown = (e) => {
