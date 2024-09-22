@@ -30,7 +30,9 @@ const Nav = () => {
 
     const logoutsubmitHandler = (e) => {
         e.preventDefault();
+        setOpacity(0);
         logout();
+        navigate('/learning')
         setMenu(-100);
     };
 
@@ -45,7 +47,9 @@ const Nav = () => {
         }
     };
 
-    const profileNavigate = () => {
+    const profileNavigate = (e) => {
+        e.preventDefault();
+        setOpacity(0);
         navigate("/Profile");
         setMenu(-100);
     };
