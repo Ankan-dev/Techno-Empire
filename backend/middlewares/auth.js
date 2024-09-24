@@ -1,4 +1,5 @@
 const Student =require('../models/student-model.js')
+const Teacher=require('../models/teacher-model.js')
 const jwt =require('jsonwebtoken');
 
 const authenticateUser= async(req,res,next)=>{
@@ -35,4 +36,35 @@ const authenticateUser= async(req,res,next)=>{
     }
 }
 
-module.exports=authenticateUser
+const authenticateTeacher= async(req,res,next)=>{
+    const token=req.cookies?.AccessToken
+    if(!token){
+        return res.status(400)
+        .json({
+            message:"cookies are missing",
+            success:false
+        })
+    }
+
+    try {
+        
+        const decoded=jwt.verify(token,process.env.SECRET);
+        const teacher=await Teacher.findById(decoded._id).select("-password -refreshToken");
+
+        if(!teacher){
+            res.status(400)
+            .json({
+                message:"Teacher not found",
+                success:false
+            })
+        }
+
+        req.teacher=teacher;
+        next()
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+module.exports={authenticateUser,authenticateTeacher}
