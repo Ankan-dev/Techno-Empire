@@ -20,6 +20,19 @@ const generateToken = async (email) => {
 }
 
 
+const sendOTPForVerification= async(email)=>{
+    const otp = OneTimePassword();
+        const subject = "One Time Password for getting Registered";
+        const message = `This code for your verification is ${otp}. This code is valid for 60 seconds. Don't share this with anyone as it can lead to major security issues`;
+
+        const isEmailSent = await sendEmail(email, subject, message);
+
+        if (!isEmailSent) {
+            return false
+        }
+        return true;
+}
+
 const Register = async (req, res) => {
     const { fullname, email } = req.body;
     if (!fullname || !email) {
@@ -33,6 +46,7 @@ const Register = async (req, res) => {
     try {
         const teacherExists = Teacher.findOne({ email });
         if (teacherExists) {
+            //console.log(teacherExists);
             return res.status(403)
                 .json({
                     message: "user already exists",
@@ -50,11 +64,8 @@ const Register = async (req, res) => {
                 })
         }
 
-        const otp = OneTimePassword();
-        const subject = "One Time Password for getting Registered";
-        const message = `This code for your verification is ${otp}. This code is valid for 60 seconds. Don't share this with anyone as it can lead to major security issues`;
+        const isEmailSent=await sendOTPForVerification(email)
 
-        const isEmailSent = await sendEmail(email, subject, message);
 
         if (!isEmailSent) {
             return res.status(404)
@@ -184,5 +195,45 @@ const login=async (req,res)=>{
             })
     }
 
+    try {
+      
+        const isEmailSent=await sendOTPForVerification(email)
+
+
+        if (!isEmailSent) {
+            return res.status(404)
+                .json({
+                    message: "Email not found",
+                    success: false
+                })
+        }
+        
+        const storeOTP = await Teacher.findOneAndUpdate({ email }, { $set: { verificationCode: otp } }, { new: true });
+
+        if (!storeOTP) {
+            return res.status(404)
+                .json({
+                    message: "Email not found",
+                    success: false
+                })
+        }
+        return res.status(201)
+            .json({
+                message: "Otp hasbeen send to your mail",
+                success: true
+            })
+
+    } catch (error) {
+        console.log("Error has occured")
+        console.log(error.message);
+        return res.status(500).json({
+            message: "Internal Server Error",
+            success: false,
+            error: error.message
+        });
+    }
+
     
 }
+
+module.exports={Register,validateCode,login};

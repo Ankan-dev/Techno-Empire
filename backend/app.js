@@ -22,7 +22,7 @@ app.use(express.urlencoded({extended:true,limit:'16kb'}));
 app.use(express.static("public"));
 
 app.use('/app',studentRoute);
-//app.use('/app',teacherRoute);
+app.use('/app',teacherRoute);
 
 
 db_conn()
