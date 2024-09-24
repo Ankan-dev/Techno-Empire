@@ -1,6 +1,7 @@
-const OneTimePassword=()=>{
-    let otp=Math.floor(Math.random()*9999);
+const OneTimePassword = () => {
+    let otp = Math.floor(1000 + Math.random() * 9000);
     return otp;
 }
+
 
 module.exports={OneTimePassword};

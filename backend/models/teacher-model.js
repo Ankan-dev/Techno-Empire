@@ -10,9 +10,8 @@ const teacherSchema= mongoose.Schema({
         type:String,
         required:true
     },
-    password:{
+    verificationCode:{
         type:String,
-        required:true
     },
     picture:{
         type:String
@@ -24,7 +23,6 @@ const teacherSchema= mongoose.Schema({
     refreshToken:{
         type:String
     }
-
 })
 
 module.exports=mongoose.model("Teachers",teacherSchema);
