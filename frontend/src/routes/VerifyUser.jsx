@@ -95,7 +95,7 @@ const VerifyUser = () => {
         <div className='w-full h-[100vh] flex flex-col items-center pt-8 bg-black'>
             <h1 className='text-2xl font-bold md:text-5xl md:mt-10 text-white'>Enter the Code sent to your mail</h1>
             <form className='w-full min-h-[15vh]  flex flex-col items-center justify-center mt-5 gap-3 '>
-                <input type='password' value={code} onChange={(e) => { handleChange(e) }} placeholder='Enter the code' className='w-[80%] h-10 border-2  p-2 md:w-[30%] border-blue-400 bg-transparent' />
+                <input type='password' value={code} onChange={(e) => { handleChange(e) }} placeholder='Enter the code' className='w-[80%] h-10 border-2 text-white p-2 md:w-[30%] border-blue-400 bg-transparent' />
                 <button id='verify-button' className='border-2 border-white rounded-lg text-white font-bold w-[10rem] h-[2.5rem]' onClick={handleSubmit}>Verify</button>
                 {
                     timeOver ?
