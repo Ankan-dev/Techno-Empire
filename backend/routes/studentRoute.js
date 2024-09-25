@@ -7,9 +7,9 @@ router.post('/register-student',RegisterStudent);
 router.post('/verify-student',verifyEmail);
 router.get('/student-profile',authenticateUser,profile);
 router.post('/student-login',login);
-router.put('/student-logout',authenticateUser,logout);
+router.post('/student-logout',authenticateUser,logout);
 router.put('/student-resend',resendCode);
-router.put('/student-deleteToken',deleteToken);
+router.delete('/student-deleteToken',deleteToken);
 router.put('/student-updateDetails', authenticateUser,updateProfileDetails);
 
 

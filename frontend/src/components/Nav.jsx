@@ -38,7 +38,7 @@ const Nav = () => {
 
     const logout = async () => {
         try {
-            const response = await axios.put('/app/student-logout');
+            const response = await axios.post('/app/student-logout');
             if (response && response.data) {
                 dispatch(removeUser());
             }
