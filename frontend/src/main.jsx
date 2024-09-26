@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import Layout from './Layout.jsx'
 import Layout2 from './Layout2.jsx'
+import TeacherLayout from './TeacherLayout.jsx'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Home from './routes/Home.jsx'
@@ -11,7 +12,7 @@ import Profile from './routes/Profile.jsx'
 import { Provider } from 'react-redux'
 import { store } from './store/store.js'
 import Learning from './routes/Learning.jsx'
-
+import TeacherHome from './routes/TeacherHome.jsx'
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,16 @@ const router = createBrowserRouter([
       {
         path:"/profile",
         element:<Profile/>
+      }
+    ]
+  },
+  {
+    path:"",
+    element:<TeacherLayout/>,
+    children:[
+      {
+        path:"/Educator",
+        element:<TeacherHome/>
       }
     ]
   }

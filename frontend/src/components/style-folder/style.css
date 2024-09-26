@@ -1,0 +1,32 @@
+.learning-link {
+    color: white;
+    transition: transform 0.5s ease-in-out, color 0.5s ease-in-out;
+    text-decoration: none;
+}
+
+.learning-link:hover {
+    color: rgb(3, 137, 226);
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+ #teacher-head{
+    
+    font-size: 90px;
+   font-family: 'gilroy';
+    font-weight: 900;
+    font-size: 2rem;
+ }
+
+ #register{
+    box-shadow: -1px 1px 70px #60a5fa, 5px 5px 50px inset #60a5fa;
+ }
+
+ @media (min-width:1024px) {
+    #teacher-head{
+        font-size: 5rem;
+    }
+ }
+
+
+

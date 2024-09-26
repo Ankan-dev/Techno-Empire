@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { IoCartSharp } from "react-icons/io5";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeUser } from '../slice/user-slice';
 import axios from 'axios';
+import './style-folder/style.css'
 
 const Nav = () => {
     const navigate = useNavigate();
@@ -83,7 +84,7 @@ const Nav = () => {
                 </div>
                 <div className='w-[40%] h-full hidden md:flex'>
                     <ul className='flex w-full h-full justify-around items-center text-[80%] font-bold'>
-                        <li className='hover:text-blue-400 cursor-pointer hover:scale-110 transition-scale duration-500 ease-in-out'>Learning</li>
+                        <li ><Link to='/Learning' className='learning-link'>Learning</Link></li>
                         <li className='hover:text-blue-400 cursor-pointer hover:scale-110 transition-scale duration-500 ease-in-out'>courses</li>
                         <li className='hover:text-blue-400 cursor-pointer hover:scale-110 transition-scale duration-500 ease-in-out'>classes</li>
                         <li className='hover:text-blue-400 cursor-pointer hover:scale-110 transition-scale duration-500 ease-in-out relative'>Educator</li>
