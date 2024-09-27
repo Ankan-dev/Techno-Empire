@@ -92,7 +92,7 @@ const Register = async (req, res) => {
 
         return res.status(201)
             .json({
-                message: "Otp hasbeen send to your mail",
+                message: "Otp has been send to your mail",
                 success: true
             })
 
@@ -109,6 +109,9 @@ const Register = async (req, res) => {
 
 const validateCode = async (req, res) => {
     const { email, code } = req.body;
+
+    console.log(email)
+    console.log(code);``
 
     if (!email || !code) {
         return res.status(404).json({

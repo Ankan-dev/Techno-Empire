@@ -1,6 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+
 
 const TeacherNav = ({openLogin,setOpenLogin}) => {
+
+
 
     const loginClickHandle=(e)=>{
         e.preventDefault();

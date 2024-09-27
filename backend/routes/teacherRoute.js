@@ -4,7 +4,7 @@ const {Register,validateCode,login,logout} = require('../controllers/teacher_con
 const {authenticateTeacher}=require('../middlewares/auth.js')
 
 router.post('/register-teacher',Register);
-router.put('/validate-teacher',validateCode);
+router.post('/validate-teacher',validateCode);
 router.post('/login-teacher',login);
 router.post('/logout-teacher',authenticateTeacher,logout)
 
