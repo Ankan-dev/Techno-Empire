@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import userSlice from "./user-slice";
+
 
 const initialState={
-    teacher:[]
+    teacher:null
 }
 
 export const teacherSlice= createSlice({
@@ -10,12 +10,10 @@ export const teacherSlice= createSlice({
     initialState,
     reducers:{
         addTeachers:(state,action)=>{
-            if(state.teacher.length===0){
-                state.teacher.push(action.payload)
-            }
+           state.teacher=action.payload
         },
         removeTeachers:(state)=>{
-            state.teacher=[]
+            state.teacher=null
         }
     }
 })

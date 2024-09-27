@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import background from '../assets/techers-background.webp'
 import './style-folder/style.css'
 import { useOutletContext } from 'react-router-dom'
 import axios from 'axios'
-import { useDispatch } from 'react-redux'
+import { useDispatch,useSelector } from 'react-redux'
 import {addTeachers} from '../slice/teacher-slice.js'
 
 
@@ -13,6 +13,7 @@ import {addTeachers} from '../slice/teacher-slice.js'
 
 const TeacherHome = () => {
 
+  const teacher=useSelector((state)=>state.teacher)
   const [openRegister, setOpenRegister] = useState(false)
   const { openLogin, setOpenLogin } = useOutletContext();
   const [loginOtp, setLoginOtp] = useState(false);
@@ -90,8 +91,9 @@ const TeacherHome = () => {
       const res=await axios.post('/app/validate-teacher',data);
       if(res){
         setOpenRegister(false)
-        //dispatch(addTeachers(res.data))
-        console.log(res.data);
+        dispatch(addTeachers(res.data.data))
+        //console.log(teacher);
+        //console.log(res.data.data);
       }
     } catch (error) {
       if (error.response) {
@@ -109,6 +111,10 @@ const TeacherHome = () => {
     }
   }
 
+
+  useEffect(() => {
+    console.log('Current Teacher State:', teacher);
+  }, [teacher]);
   return (
     <div className='flex justify-center items-center'>
       <img className='fixed w-[100vw] h-[100vh] z-[-1] top-0' src={background} />
