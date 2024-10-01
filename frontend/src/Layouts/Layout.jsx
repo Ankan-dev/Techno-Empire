@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
-import Nav from './components/Nav';
-import Foot from './components/Foot';
+import Nav from '../components/Nav';
+import Foot from '../components/Foot';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { addUser } from './slice/user-slice';
+import { addUser } from '../slice/user-slice';
 
 const Layout = () => {
 

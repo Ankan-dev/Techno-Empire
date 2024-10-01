@@ -6,7 +6,7 @@
 
 .learning-link:hover {
     color: rgb(3, 137, 226);
-    transform: scale(1.1);
+    
     cursor: pointer;
 }
 

@@ -1,19 +1,14 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState } from 'react'
 import background from '../assets/techers-background.webp'
 import './style-folder/style.css'
 import { useOutletContext } from 'react-router-dom'
 import axios from 'axios'
-import { useDispatch,useSelector } from 'react-redux'
-import {addTeachers} from '../slice/teacher-slice.js'
-
-
-
-    
-
+import { useDispatch} from 'react-redux'
+import { addTeachers } from '../slice/teacher-slice.js'
+import ClipLoader from "react-spinners/ClipLoader";
 
 const TeacherHome = () => {
 
-  const teacher=useSelector((state)=>state.teacher)
   const [openRegister, setOpenRegister] = useState(false)
   const { openLogin, setOpenLogin } = useOutletContext();
   const [loginOtp, setLoginOtp] = useState(false);
@@ -23,8 +18,13 @@ const TeacherHome = () => {
   })
   const [isError, setisError] = useState("");
   const [registerMessage, setRegisterMessage] = useState("");
-  const [code,setCode]=useState("")
-  const dispatch=useDispatch()
+  const [code, setCode] = useState("")
+  const dispatch = useDispatch()
+  const [loginEmail, setLoginEmail] = useState("");
+  const [margin,setMargin]=useState(20);
+  const [registerLoader,setRegisterLoader]=useState(false)
+  const [confirmRegisterLoader,setConfirmRegisterLoader]=useState(false)
+
 
   const openRegisterForm = (e) => {
     e.preventDefault();
@@ -43,32 +43,34 @@ const TeacherHome = () => {
     let newData = { ...registerData };
     newData[e.target.name] = e.target.value;
     setRegisterData(newData);
-   // console.log(registerData)
+    // console.log(registerData)
   }
 
-  const getRegisterOtp=(e)=>{
-   
+  const getRegisterOtp = (e) => {
+
     setCode(e.target.value);
-    
+
   }
 
 
 
   const submitRegister = async (e) => {
     e.preventDefault();
-
+    setRegisterLoader(true);
     try {
       const res = await axios.post('/app/register-teacher', registerData);
       if (res) {
         setLoginOtp(true);
-        
+        setRegisterMessage(res.data.message)
       }
 
     } catch (error) {
       if (error.response) {
         // Server responded with a status other than 2xx
-        console.log(error.response.data.message); // Log the error message from the server
+        setRegisterLoader(false)
+        //console.log(error.response.data.message); // Log the error message from the server
         setisError(error.response.data.message);
+        setMargin(0)
         console.log(error.response.status); // Log the status code
       } else if (error.request) {
         // Request was made, but no response was received
@@ -80,17 +82,21 @@ const TeacherHome = () => {
     }
   }
 
-  const confirmRegister= async(e)=>{
+  const confirmRegister = async (e) => {
     e.preventDefault();
-    const data={
-      email:registerData.email,
-      code:code
+    const data = {
+      email: registerData.email,
+      code: code
     }
+    setConfirmRegisterLoader(true)
     //console.log(data);
     try {
-      const res=await axios.post('/app/validate-teacher',data);
-      if(res){
+      const res = await axios.post('/app/validate-teacher', data);
+      if (res) {
         setOpenRegister(false)
+        setConfirmRegisterLoader(false)
+        setLoginOtp(false);
+        setRegisterLoader(false)
         dispatch(addTeachers(res.data.data))
         //console.log(teacher);
         //console.log(res.data.data);
@@ -98,6 +104,7 @@ const TeacherHome = () => {
     } catch (error) {
       if (error.response) {
         // Server responded with a status other than 2xx
+        setConfirmRegisterLoader(false)
         console.log(error.response.data.message); // Log the error message from the server
         setisError(error.response.data.message);
         console.log(error.response.status); // Log the status code
@@ -111,10 +118,76 @@ const TeacherHome = () => {
     }
   }
 
+  const loginInfo = (e) => {
+    let newData = e.target.value;
+    setLoginEmail(newData);
+  }
 
-  useEffect(() => {
-    console.log('Current Teacher State:', teacher);
-  }, [teacher]);
+  const loginTeacher = async (e) => {
+    e.preventDefault()
+    try {
+      const res = await axios.post('/app/login-teacher', { email: loginEmail });
+
+      if (res.data) {
+        console.log(res.data)
+        setLoginOtp(true);
+      }
+
+    } catch (error) {
+      if (error.response) {
+        // Server responded with a status other than 2xx
+        console.log(error.response.data.message); // Log the error message from the server
+        setisError(error.response.data.message);
+        console.log(error.response.status); // Log the status code
+      } else if (error.request) {
+        // Request was made, but no response was received
+        console.log("No response received:", error.request);
+      } else {
+        // Something else happened while setting up the request
+        console.log("Error:", error.message);
+      }
+    }
+  }
+
+  const getLoginCode = (e) => {
+    let newCode = e.target.value;
+    console.log(newCode)
+    setCode(newCode);
+  }
+
+  const confirmLogin = async (e) => {
+
+    e.preventDefault();
+
+    try {
+
+      const response = await axios.post('/app/validate-teacher', {
+        email: loginEmail,
+        code: code
+      })
+
+      if (response.data) {
+        dispatch(addTeachers(response.data.data))
+        setOpenLogin(false);
+      }
+
+    } catch (error) {
+      if (error.response) {
+        // Server responded with a status other than 2xx
+        console.log(error.response.data.message); // Log the error message from the server
+        setisError(error.response.data.message);
+        console.log(error.response.status); // Log the status code
+      } else if (error.request) {
+        // Request was made, but no response was received
+        console.log("No response received:", error.request);
+      } else {
+        // Something else happened while setting up the request
+        console.log("Error:", error.message);
+      }
+    }
+
+  }
+
   return (
     <div className='flex justify-center items-center'>
       <img className='fixed w-[100vw] h-[100vh] z-[-1] top-0' src={background} />
@@ -129,7 +202,7 @@ const TeacherHome = () => {
       {
         openRegister === true ?
           <div className='fixed z-10 w-full h-full bg-[rgba(0,0,0,0.6)] top-0 flex justify-center py-[12rem]' onClick={closeRegistrationForm}>
-            <form id='register' className='w-[30rem] h-[22rem] bg-black border-3 border-white pt-4 flex flex-col items-center' onClick={(e) => { e.stopPropagation() }}>
+            <form id='register' className='w-[30rem] min-h-[22rem] bg-black border-3 border-white pt-4 flex flex-col items-center' onClick={(e) => { e.stopPropagation() }}>
               <h1 className='text-white '>Register</h1>
               <input name='fullname' onChange={getRegisterData} type='text' className='w-[80%] py-1 px-2 border-2 border-blue-400 bg-transparent text-white mt-3' placeholder='Full Name' />
               <input name='email' onChange={getRegisterData} type='email' className='w-[80%] py-1 px-2 border-2 border-blue-400 bg-transparent text-white mt-3' placeholder='Email' />
@@ -139,18 +212,40 @@ const TeacherHome = () => {
                   <input onChange={getRegisterOtp} type='password' className='w-[80%] py-1 px-2 border-2 border-blue-400 bg-transparent text-white mt-3' placeholder='Enter your code' />
                   : <></>
               }
-
+              {
+                isError !== "" ? <p className='text-red-500 mt-3'>{isError}</p> : <></>
+              }
               {!loginOtp ?
-                <button className='w-[8rem] h-[3rem] bg-blue-500 rounded-full my-4 bg-transparent active:scale-90 border-white border-4 text-white'
+                <button className='w-[8rem] h-[3rem] bg-blue-500 rounded-full  bg-transparent active:scale-90 border-white border-4 text-white'
                   onClick={submitRegister}
-                  style={{ boxShadow: "-2px 1px 45px #60a5fa, 5px 5px 50px inset #60a5fa" }}>
-                  Register
+                  style={{ boxShadow: "-2px 1px 45px #60a5fa, 5px 5px 50px inset #60a5fa",marginTop:`${margin}px` }}>
+                  {
+                    !registerLoader?<>Register</>:<ClipLoader
+                    color={'#84f0f5'}
+                    
+                    size={20}
+                    aria-label="Loading Spinner"
+                    data-testid="loader"
+                  />
+                  }
+                  
                 </button> :
-                <button className='w-[8rem] h-[3rem] bg-blue-500 rounded-full my-4 bg-transparent active:scale-90 border-white border-4 text-white'
+                <>
+                <p className='text-green-400 mt-3'>{registerMessage}</p>
+                <button className='w-[8rem] h-[3rem] bg-blue-500 rounded-full  bg-transparent active:scale-90 border-white border-4 text-white'
                   onClick={confirmRegister}
                   style={{ boxShadow: "-2px 1px 45px #60a5fa, 5px 5px 50px inset #60a5fa" }}>
-                  confirm
+                    {
+                      !confirmRegisterLoader?<>confirm</>:<ClipLoader
+                      color={'#84f0f5'}
+                      
+                      size={20}
+                      aria-label="Loading Spinner"
+                      data-testid="loader"/>
+
+                    }
                 </button>
+                </>
               }
             </form>
           </div> : <></>
@@ -161,15 +256,33 @@ const TeacherHome = () => {
           <div className='fixed z-10 w-full h-full bg-[rgba(0,0,0,0.6)] top-0 flex justify-center py-[12rem]' onClick={closeLoginForm}>
             <form id='register' className='w-[30rem] h-[16rem] bg-black border-3 border-white pt-4 flex flex-col items-center' onClick={(e) => { e.stopPropagation() }}>
               <h1 className='text-white '>Login</h1>
-              <input type='email' className='w-[80%] py-1 px-2 border-2 border-blue-400 bg-transparent text-white mt-3' placeholder='Email' />
+
               {
                 loginOtp === true ?
-                  <input type='password' className='w-[80%] py-1 px-2 border-2 border-blue-400 bg-transparent text-white mt-3' placeholder='Enter your code' /> : <></>
+                  <><input onChange={getLoginCode} type='password' className='w-[80%] py-1 px-2 border-2 border-blue-400 bg-transparent text-white mt-3' placeholder='Enter your code' />
+
+                    {
+                      isError !== "" ? <p className='text-red-500 mt-3'>{isError}</p> : <></>
+                    }
+
+                    <button className='w-[8rem] h-[3rem] bg-blue-500 rounded-full my-4 bg-transparent active:scale-90 border-white border-4 text-white'
+                      onClick={confirmLogin}
+                      style={{ boxShadow: "-2px 1px 45px #60a5fa, 5px 5px 50px inset #60a5fa" }}>
+                        
+                      confirm
+                    </button>
+
+                  </> : <> <input onChange={loginInfo} type='email' className='w-[80%] py-1 px-2 border-2 border-blue-400 bg-transparent text-white mt-3' placeholder='Email' />
+                    {
+                      isError !== "" ? <p className='text-red-500 mt-3'>{isError}</p> : <></>
+                    }
+                    <button className='w-[8rem] h-[3rem] bg-blue-500 rounded-full my-4 bg-transparent active:scale-90 border-white border-4 text-white'
+                      style={{ boxShadow: "-2px 1px 45px #60a5fa, 5px 5px 50px inset #60a5fa" }} onClick={loginTeacher}>
+                      Login
+                    </button>
+                  </>
               }
-              <button className='w-[8rem] h-[3rem] bg-blue-500 rounded-full my-4 bg-transparent active:scale-90 border-white border-4 text-white'
-                style={{ boxShadow: "-2px 1px 45px #60a5fa, 5px 5px 50px inset #60a5fa" }}>
-                Login
-              </button>
+
             </form>
           </div> : <></>
 

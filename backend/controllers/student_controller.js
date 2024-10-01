@@ -11,8 +11,8 @@ const generateToken = async (email) => {
     try {
         const user = await Student.findOne({ email });
         if (user) {
-            const access = generateAccessToken(user._id)
-            const refresh = generateRefreshToken(user._id)
+            const access = generateAccessToken(user._id,user.email)
+            const refresh = generateRefreshToken(user._id,user.email)
             return { access, refresh };
         }
     } catch (error) {

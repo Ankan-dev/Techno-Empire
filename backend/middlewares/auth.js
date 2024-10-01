@@ -39,35 +39,48 @@ const authenticateUser = async (req, res, next) => {
 };
 
 
-const authenticateTeacher= async(req,res,next)=>{
-    const token=req.cookies?.AccessToken
-    if(!token){
-        return res.status(400)
-        .json({
-            message:"cookies are missing",
-            success:false
-        })
+const authenticateTeacher = async (req, res, next) => {
+    const token = req.cookies?.AccessToken;
+    
+    // Check if token is present
+    if (!token) {
+        return res.status(400).json({
+            message: "Cookies are missing",
+            success: false
+        });
     }
 
     try {
+        // Verify the token
+        const decoded = jwt.verify(token, process.env.SECRET);
         
-        const decoded=jwt.verify(token,process.env.SECRET);
-        const teacher=await Teacher.findById(decoded._id).select("-password -refreshToken");
+        // Find the teacher in the database
+        const teacher = await Teacher.findOne({email:decoded?.email}).select("-password -refreshToken");
 
-        if(!teacher){
-            res.status(400)
-            .json({
-                message:"Teacher not found",
-                success:false
-            })
+        console.log(teacher)
+        // Check if the teacher was found
+        if (!teacher) {
+            return res.status(400).json({
+                message: "Teacher not found",
+                success: false
+            });
         }
 
-        req.teacher=teacher;
-        next()
+        // Attach teacher information to the request object
+        req.teacher = teacher;
+        
+        // Call the next middleware or route handler
+        next();
 
     } catch (error) {
         console.log(error.message);
+        // Send an error response if something goes wrong
+        return res.status(500).json({
+            message: "Internal server error",
+            success: false,
+            error: error.message
+        });
     }
-}
+};
 
 module.exports={authenticateUser,authenticateTeacher}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import TeacherNav from './components/TeacherNav'
+import TeacherNav from '../components/TeacherNav'
 import { Outlet } from 'react-router-dom'
 
 const TeacherLayout = () => {

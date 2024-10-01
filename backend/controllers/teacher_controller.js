@@ -11,8 +11,8 @@ const generateToken = async (email) => {
     try {
         const user = await Teacher.findOne({ email });
         if (user) {
-            const access = await generateAccessToken(user._id, email)
-            const refresh = await generateRefreshToken(user._id, email)
+            const access = await generateAccessToken(user._id, user.email)
+            const refresh = await generateRefreshToken(user._id, user.email)
             return { access, refresh };
         } else {
             return { access: null, refresh: null }; // Return null tokens if user is not found
@@ -310,4 +310,31 @@ const logout=async(req,res)=>{
     }
 }
 
-module.exports = { Register, validateCode, login,logout };
+const profile = async (req, res) => {
+    try {
+        const teacher = req.teacher;  // Assuming req.teacher is set by some middleware
+        if (!teacher) {
+            return res.status(404).json({
+                message: "No teacher is logged in",
+                success: false
+            });
+        }
+        console.log(teacher)
+
+        return res.status(200).json({
+            message: "Teacher found successfully",
+            data: teacher,
+            success: true
+        });
+    } catch (error) {
+        // Catch any unexpected error and return 500
+        return res.status(500).json({
+            message: "Server error",
+            success: false,
+            error: error.message
+        });
+    }
+};
+
+
+module.exports = { Register, validateCode, login,logout,profile };

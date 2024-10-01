@@ -84,10 +84,10 @@ const Nav = () => {
                 </div>
                 <div className='w-[40%] h-full hidden md:flex'>
                     <ul className='flex w-full h-full justify-around items-center text-[80%] font-bold'>
-                        <li ><Link to='/Learning' className='learning-link'>Learning</Link></li>
+                        <li className='hover:scale-110 transition-scale duration-500 ease-in-out' ><Link to='/Learning' className='learning-link'>Learning</Link></li>
                         <li className='hover:text-blue-400 cursor-pointer hover:scale-110 transition-scale duration-500 ease-in-out'>courses</li>
                         <li className='hover:text-blue-400 cursor-pointer hover:scale-110 transition-scale duration-500 ease-in-out'>classes</li>
-                        <li className='hover:text-blue-400 cursor-pointer hover:scale-110 transition-scale duration-500 ease-in-out relative'>Educator</li>
+                        <li className=' hover:scale-110 transition-scale duration-500 ease-in-out relative'><Link to='/Educator' className='learning-link'>Educator</Link></li>
                     </ul>
                 </div>
                 <div className='h-full hidden md:flex items-center justify-center'>
