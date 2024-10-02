@@ -5,7 +5,7 @@ import { useOutletContext } from 'react-router-dom'
 import axios from 'axios'
 import { useDispatch} from 'react-redux'
 import { addTeachers } from '../slice/teacher-slice.js'
-import ClipLoader from "react-spinners/ClipLoader";
+import ButtonLoader from '../components/buttonLoader.jsx'
 
 const TeacherHome = () => {
 
@@ -24,7 +24,8 @@ const TeacherHome = () => {
   const [margin,setMargin]=useState(20);
   const [registerLoader,setRegisterLoader]=useState(false)
   const [confirmRegisterLoader,setConfirmRegisterLoader]=useState(false)
-
+  const [loginLoader,setLoginLoader]=useState(false);
+  const [confirmLoader,setConfirmLoader]=useState(false);
 
   const openRegisterForm = (e) => {
     e.preventDefault();
@@ -125,10 +126,12 @@ const TeacherHome = () => {
 
   const loginTeacher = async (e) => {
     e.preventDefault()
+    setLoginLoader(true)
     try {
       const res = await axios.post('/app/login-teacher', { email: loginEmail });
-
+      setLoginLoader(false)
       if (res.data) {
+      
         console.log(res.data)
         setLoginOtp(true);
       }
@@ -136,6 +139,7 @@ const TeacherHome = () => {
     } catch (error) {
       if (error.response) {
         // Server responded with a status other than 2xx
+        setLoginLoader(false)
         console.log(error.response.data.message); // Log the error message from the server
         setisError(error.response.data.message);
         console.log(error.response.status); // Log the status code
@@ -158,6 +162,7 @@ const TeacherHome = () => {
   const confirmLogin = async (e) => {
 
     e.preventDefault();
+    setConfirmLoader(true)
 
     try {
 
@@ -167,6 +172,7 @@ const TeacherHome = () => {
       })
 
       if (response.data) {
+        setConfirmLoader(false)
         dispatch(addTeachers(response.data.data))
         setOpenLogin(false);
       }
@@ -174,6 +180,7 @@ const TeacherHome = () => {
     } catch (error) {
       if (error.response) {
         // Server responded with a status other than 2xx
+        setConfirmLoader(false);
         console.log(error.response.data.message); // Log the error message from the server
         setisError(error.response.data.message);
         console.log(error.response.status); // Log the status code
@@ -220,13 +227,7 @@ const TeacherHome = () => {
                   onClick={submitRegister}
                   style={{ boxShadow: "-2px 1px 45px #60a5fa, 5px 5px 50px inset #60a5fa",marginTop:`${margin}px` }}>
                   {
-                    !registerLoader?<>Register</>:<ClipLoader
-                    color={'#84f0f5'}
-                    
-                    size={20}
-                    aria-label="Loading Spinner"
-                    data-testid="loader"
-                  />
+                    !registerLoader?<>Register</>:<ButtonLoader/>
                   }
                   
                 </button> :
@@ -236,12 +237,7 @@ const TeacherHome = () => {
                   onClick={confirmRegister}
                   style={{ boxShadow: "-2px 1px 45px #60a5fa, 5px 5px 50px inset #60a5fa" }}>
                     {
-                      !confirmRegisterLoader?<>confirm</>:<ClipLoader
-                      color={'#84f0f5'}
-                      
-                      size={20}
-                      aria-label="Loading Spinner"
-                      data-testid="loader"/>
+                      !confirmRegisterLoader?<>confirm</>:<ButtonLoader/>
 
                     }
                 </button>
@@ -268,8 +264,7 @@ const TeacherHome = () => {
                     <button className='w-[8rem] h-[3rem] bg-blue-500 rounded-full my-4 bg-transparent active:scale-90 border-white border-4 text-white'
                       onClick={confirmLogin}
                       style={{ boxShadow: "-2px 1px 45px #60a5fa, 5px 5px 50px inset #60a5fa" }}>
-                        
-                      confirm
+                        confirm
                     </button>
 
                   </> : <> <input onChange={loginInfo} type='email' className='w-[80%] py-1 px-2 border-2 border-blue-400 bg-transparent text-white mt-3' placeholder='Email' />
@@ -278,7 +273,10 @@ const TeacherHome = () => {
                     }
                     <button className='w-[8rem] h-[3rem] bg-blue-500 rounded-full my-4 bg-transparent active:scale-90 border-white border-4 text-white'
                       style={{ boxShadow: "-2px 1px 45px #60a5fa, 5px 5px 50px inset #60a5fa" }} onClick={loginTeacher}>
-                      Login
+                        {
+                          !loginLoader?<>Login</>:<ButtonLoader/>
+                        }
+                      
                     </button>
                   </>
               }

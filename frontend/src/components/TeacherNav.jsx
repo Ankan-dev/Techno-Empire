@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { addTeachers,removeTeachers } from '../slice/teacher-slice.js';
 import axios from 'axios';
-import ClipLoader from "react-spinners/ClipLoader";
+import ButtonLoader from '../components/buttonLoader.jsx'
 
 const TeacherNav = ({ openLogin, setOpenLogin }) => {
     const dispatch = useDispatch();
@@ -73,12 +73,7 @@ const TeacherNav = ({ openLogin, setOpenLogin }) => {
                     <p className='my-3 font-bold text-white text-[80%]'>Dashboard</p>
                     <button className='border-2 px-6 py-1 font-bold md:text-sm active:scale-90 text-white' onClick={logout}>
                         {
-                            logoutLoader===true?<ClipLoader
-                            color={'#ffffff'}
-                            
-                            size={20}
-                            aria-label="Loading Spinner"
-                            data-testid="loader"/>:<>Logout</>
+                            logoutLoader===true?<ButtonLoader/>:<>Logout</>
                         }
                     </button>
                 </div>

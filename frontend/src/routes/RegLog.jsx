@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addUser } from '../slice/user-slice.js'
 import './style-folder/style.css'
-
+import ButtonLoader from '../components/buttonLoader.jsx'
 
 const RegLog = () => {
 
@@ -24,7 +24,8 @@ const RegLog = () => {
     const dispatch = useDispatch();
     const [isError, setisError] = useState("");
     const [isLoginError, setisLoginError] = useState("");
-
+    const [registerLoader,setRegisterLoader]=useState(false);
+    const [loginLoader,setLoginLoader]=useState(false)
 
     const Registered = (val) => {
         setisRegistered(val);
@@ -44,9 +45,11 @@ const RegLog = () => {
 
     const submitLogin = async (e) => {
         e.preventDefault();
+        setLoginLoader(true)
         try {
             const response = await axios.post('/app/student-login', loginData);
             if (response && response.data) {
+                setLoginLoader(false)
                 dispatch(addUser(response.data));
                 navigate('/Learning')
             } else if (response && response.success === false && response.message === "user not verified") {
@@ -59,6 +62,7 @@ const RegLog = () => {
         } catch (error) {
             if (error.response) {
                 // Server responded with a status other than 2xx
+                setLoginLoader(false)
                 console.log(error.response.data.message); // Log the error message from the server
 
                 setisLoginError(error.response.data.message);
@@ -83,15 +87,19 @@ const RegLog = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setRegisterLoader(true)
         if (checkPassword != data.password) {
             setIscorrect(false);
-            console.log(iscorrect);
+            setRegisterLoader(false);
+            //console.log(iscorrect);
         } else {
             setIscorrect(true);
+           
             try {
                 const registerResponse = await axios.post('/app/register-student', data);
                 if (registerResponse) {
-                    console.log(registerResponse);
+                    setRegisterLoader(false)
+                    //console.log(registerResponse);
                     if (registerResponse.data.success == true) {
                         navigate('/verify-user', { state: { email: data.email } })
                         console.log(registerResponse.data);
@@ -102,6 +110,7 @@ const RegLog = () => {
             } catch (error) {
                 if (error.response) {
                     // Server responded with a status other than 2xx
+                    setRegisterLoader(false);
                     console.log(error.response.data.message); // Log the error message from the server
                     setisError(error.response.data.message);
                     console.log(error.response.status); // Log the status code
@@ -132,10 +141,13 @@ const RegLog = () => {
                         
                         <button id='login-button' className='w-[8rem] h-[3rem] active:scale-90 bg-blue-500 rounded-full mb-3 bg-transparent border-white border-4 text-white' onClick={submitLogin}
                         >
-                            Login
+                            {
+                                !loginLoader?<>Login</>:<ButtonLoader/>
+                            }
+                            
                         </button>
 
-                        <p className='text-white font-semibold' onClick={() => Registered(true)}>Sign Up</p>
+                        <p className='text-white font-semibold cursor-pointer active:scale-90' onClick={() => Registered(true)}>Sign Up</p>
                     </form> : <form id='register-form' className='w-full h-[70vh]  flex flex-col items-center py-3  md:w-[35rem] md:h-[39rem] md:border-4 md:border-white rounded-3xl' >
                         <h1 className='text-[2rem] font-bold text-white sm:text-[3rem] mt-3'>Register</h1>
                         <h3 className='text-[1rem] font-[400] text-white mb-4 sm:text-[1.3rem] sm:mb-6'>Unlock your learning potential</h3>
@@ -153,10 +165,13 @@ const RegLog = () => {
                         
                         <button className='w-[8rem] h-[3rem] bg-blue-500 rounded-full mb-3 bg-transparent active:scale-90 border-white border-4 text-white' onClick={handleSubmit}
                             style={{ boxShadow: "-2px 1px 45px #60a5fa, 5px 5px 50px inset #60a5fa" }}>
-                            Register
+                            {
+                                !registerLoader?<>Register</>:<ButtonLoader/>
+                            }
+                            
                         </button>
 
-                        <p className='text-white font-semibold' onClick={() => Registered(false)}>Login</p>
+                        <p className='text-white font-semibold cursor-pointer active:scale-90' onClick={() => Registered(false)}>Login</p>
                     </form>
             }
         </div>
