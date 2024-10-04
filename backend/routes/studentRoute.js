@@ -9,7 +9,7 @@ router.get('/student-profile',authenticateUser,profile);
 router.post('/student-login',login);
 router.post('/student-logout',authenticateUser,logout);
 router.put('/student-resend',resendCode);
-router.delete('/student-deleteToken',deleteToken);
+router.patch('/student-deleteToken',deleteToken);
 router.put('/student-updateDetails', authenticateUser,updateProfileDetails);
 
 

@@ -26,6 +26,7 @@ const TeacherHome = () => {
   const [confirmRegisterLoader,setConfirmRegisterLoader]=useState(false)
   const [loginLoader,setLoginLoader]=useState(false);
   const [confirmLoader,setConfirmLoader]=useState(false);
+  const [counter,setCounter]=useState(60);
 
   const openRegisterForm = (e) => {
     e.preventDefault();
@@ -194,6 +195,8 @@ const TeacherHome = () => {
     }
 
   }
+
+  
 
   return (
     <div className='flex justify-center items-center'>

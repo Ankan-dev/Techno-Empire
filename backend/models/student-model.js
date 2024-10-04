@@ -13,6 +13,9 @@ const studentSchema=mongoose.Schema({
         type:String,
         require:true
     },
+    token:{
+        type:String
+    },
     phone:{
         type:String,
         default:undefined

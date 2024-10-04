@@ -1,5 +1,5 @@
 const Student = require('../models/student-model.js');
-const Token = require('../models/student-token-model.js');
+//const Token = require('../models/student-token-model.js');
 const { hashingPassword, verifyPassword } = require('../utils/hashPassword.js');
 const { OneTimePassword } = require('../utils/OTPGenerator.js');
 const { sendEmail } = require('../utils/verifyEmail.js');
@@ -68,7 +68,14 @@ const RegisterStudent = async (req, res) => {
             }
 
             // Save the OTP token to the database
-            await Token.create({ email: email, student: emailResponse._id, token: otp });
+            
+            const saveToken= await Student.findOneAndUpdate({email:email},{$set:{token:otp}},{new:true});
+            if(!saveToken){
+                return res.status(400).json({
+                    message: "Failed to send verification email",
+                    success: false
+                });
+            }
 
             return res.status(200).json({
                 message: "Student created successfully. Please verify your email.",
@@ -112,7 +119,7 @@ const verifyEmail = async (req, res) => {
     }
 
     try {
-        const codeFromDb = await Token.findOne({ email });
+        const codeFromDb = await Student.findOne({ email });
         if (!codeFromDb) {
             return res.status(401).json({
                 message: "Invalid OTP code",
@@ -130,7 +137,7 @@ const verifyEmail = async (req, res) => {
                 })
             }
 
-            const deleteToken = await Token.deleteOne({ email });
+            const deleteToken = await Student.findOneAndUpdate({email:email},{$set:{token:""}},{new:true});
             if (!deleteToken) {
                 return res.status(400).json({
                     message: "Failed to delete OTP token",
@@ -154,6 +161,7 @@ const verifyEmail = async (req, res) => {
                 secure: true
             }
 
+            console.log("sending");
             return res.status(200)
                 .cookie("AccessToken", access, options)
                 .cookie("RefreshToken", refresh, options)
@@ -260,7 +268,7 @@ const logout = async (req, res) => {
             })
     }
 
-    const deleteRefreshToken = await Student.findOneAndUpdate({ email: user.email }, { refreshToken: "" }, { new: true });
+    const deleteRefreshToken = await Student.findOneAndUpdate({ email: user.email }, { $set:{refreshToken: ""} }, { new: true });
 
     if (!deleteRefreshToken) {
         return res.status(500)
@@ -286,6 +294,7 @@ const logout = async (req, res) => {
 
 const deleteToken=async(req,res)=>{
     const {email}=req.body;
+    
     if(!email){
         return res.status(400)
         .json({
@@ -294,8 +303,10 @@ const deleteToken=async(req,res)=>{
         })
     }
 
+    console.log(email);
+
     try {
-        const deleteStatus= await Token.findOneAndUpdate({ email: email }, { refreshToken: "" }, { new: true });
+        const deleteStatus= await Student.findOneAndUpdate({ email: email }, { $set:{token: ""} }, { new: true });
         if(!deleteStatus){
             return  res.status(500)
             .json({
@@ -344,7 +355,7 @@ const resendCode=async(req,res)=>{
     }
 
     // Save the OTP token to the database
-    await Token.create({ email: email, student: emailResponse._id, token: otp });
+    await Student.findOneAndUpdate({email:email},{$set:{token:otp}},{new:true});
 
     return res.status(200).json({
         message: "Student created successfully. Please verify your email.",

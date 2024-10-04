@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import background from '../assets/background.webp';
 import profile from '../assets/profile.jpeg';
 import { IoArrowRedo } from "react-icons/io5";
@@ -10,7 +10,7 @@ const Home = () => {
   const subheadingRef = useRef(null);
   const buttonRef = useRef(null);
   const profileRef = useRef(null);
-
+  
 
 
 

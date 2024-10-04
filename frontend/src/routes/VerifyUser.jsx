@@ -17,6 +17,8 @@ const VerifyUser = () => {
     const dispatch = useDispatch();
     const [timeOver, setTImeOver] = useState(false)
     const [verifyLoader,setVerifyLoader]=useState(false)
+    const [resendLoader,setResendLoader]=useState(false);
+
 
     useEffect(() => {
         timer();
@@ -36,31 +38,23 @@ const VerifyUser = () => {
             code: code
         }
 
+        
         try {
             const sendCode = await axios.post('/app/verify-student', data)
+            
             if (sendCode) {
-                setVerifyLoader(false)
+                console.log(sendCode)
+                
                 setcode("");
                 await getUser();
-                navigate('/')
-            }
-        } catch (err) {
-            if (error.response) {
-                // Server responded with a status other than 2xx
+                navigate('/Learning')
                 setVerifyLoader(false)
-                console.log(error.response.data.message); // Log the error message from the server
-
-                setisLoginError(error.response.data.message);
-                console.log(error.response.status); // Log the status code
-            } else if (error.request) {
-                // Request was made, but no response was received
-                console.log("No response received:", error.request);
-            } else {
-                // Something else happened while setting up the request
-                console.log("Error:", error.message);
             }
+        } catch (error) {
+            console.log(error)
         }
 
+        
     }
 
     const timer = () => {
@@ -70,7 +64,8 @@ const VerifyUser = () => {
                     return previousCount - 1;
                 } else {
                     clearInterval(timeInterval.current);
-                    setTImeOver(true)
+                    setTImeOver(true);
+                    deleteCode();
                     return 0
                 }
             })
@@ -92,18 +87,34 @@ const VerifyUser = () => {
         }
     }
 
+    const deleteCode=async()=>{
+        try {
+           const deleteToken= await axios.patch('/app/student-deleteToken',{email:email});
+           if(!deleteToken){
+            console.log("The token is not deleted")
+           }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const resentCode= async(e)=>{
         e.preventDefault();
+        setResendLoader(true)
         try {
             if(!email){
+                setResendLoader(false)
                 console.log("Email is missing")
             }
             const response=await axios.put('/app/student-resend',{email:email});
             if(!response){
+                setResendLoader(false)
                 console.log("Something is wrong");
             }
+            setResendLoader(false)
             console.log(response.data);
         } catch (error) {
+            setResendLoader(false)
             console.log(error.message)
         }
     }
@@ -113,10 +124,14 @@ const VerifyUser = () => {
             <h1 className='text-2xl font-bold md:text-5xl md:mt-10 text-white'>Enter the Code sent to your mail</h1>
             <form className='w-full min-h-[15vh]  flex flex-col items-center justify-center mt-5 gap-3 '>
                 <input type='password' value={code} onChange={(e) => { handleChange(e) }} placeholder='Enter the code' className='w-[80%] h-10 border-2 text-white p-2 md:w-[30%] border-blue-400 bg-transparent' />
-                <button id='verify-button' className='border-2 border-white rounded-lg text-white font-bold w-[10rem] h-[2.5rem]' onClick={handleSubmit}>{!verifyLoader?<>Verify</>:<ButtonLoader/>}</button>
+                <button id='verify-button' className='border-2 border-white rounded-lg text-white font-bold w-[10rem] h-[2.5rem] active:scale-90' onClick={handleSubmit}>{!verifyLoader?<>Verify</>:<ButtonLoader/>}</button>
                 {
                     timeOver ?
-                        <button className=' border-white border-solid border-2 font-bold w-[10rem] h-[2.5rem] my-5 text-white' onClick={resentCode}>Resend Code</button>
+                        <button className=' border-white border-solid border-2 font-bold w-[10rem] h-[2.5rem] my-5 text-white active:scale-90' onClick={resentCode}>{
+                            !resendLoader?<>
+                            Resend Code
+                            </>:<ButtonLoader/>
+                            }</button>
                         : <></>
                 }
             </form>
